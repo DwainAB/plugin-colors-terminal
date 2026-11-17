@@ -1,0 +1,11 @@
+{
+  "name": "couleurs-terminal",
+  "owner": { "name": "Équipe YumCo" },
+  "plugins": [
+    {
+      "name": "couleurs-terminal",
+      "source": "./",
+      "description": "Style de réponse avec repères couleur : explications, erreurs, avertissements, conclusion."
+    }
+  ]
+}
