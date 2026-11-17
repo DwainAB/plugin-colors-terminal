@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Installe le style « Couleurs » pour Claude Code et l'active dans toutes les sessions.
 set -e
-REPO_RAW="${REPO_RAW:-https://raw.githubusercontent.com/DwainAB/couleurs-terminal/main}"
+REPO_RAW="${REPO_RAW:-https://raw.githubusercontent.com/DwainAB/plugin-colors-terminal/main}"
 
 mkdir -p "$HOME/.claude/output-styles"
 curl -fsSL "$REPO_RAW/output-styles/couleurs.md" -o "$HOME/.claude/output-styles/couleurs.md"
