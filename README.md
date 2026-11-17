@@ -1,6 +1,6 @@
 # Couleurs — repères visuels pour Claude Code
 
-Un style de réponse (*output style*) pour Claude Code dans le terminal. Claude découpe chaque réponse en blocs précédés d'une pastille de couleur. Vous voyez ainsi tout de suite où regarder :
+Un style de réponse (*output style*) pour Claude Code dans le terminal. Claude découpe ses réponses en blocs précédés d'une pastille de couleur. Vous voyez ainsi tout de suite où regarder :
 
 | Repère | Contenu |
 |---|---|
@@ -9,66 +9,40 @@ Un style de réponse (*output style*) pour Claude Code dans le terminal. Claude 
 | 🟡 **Avertissement** | Les risques et les points à valider |
 | 🟢 **Conclusion** | Toujours à la fin : le résultat et la prochaine étape |
 
-> Limite : Claude Code ne permet pas de changer la couleur du texte lui-même. Les couleurs viennent des pastilles emoji en tête de chaque bloc.
+Claude n'utilise que les blocs utiles. Le style change la mise en forme, pas le contenu : pas d'explication ajoutée pour remplir un bloc.
+
+> Claude Code ne permet pas de changer la couleur du texte lui-même. Les couleurs viennent des pastilles en tête de chaque bloc.
 
 ---
 
-## Installation
+## Installation (une commande)
 
-Prérequis : Claude Code installé et fonctionnel dans le terminal (`claude --version`).
+Prérequis : Claude Code installé (`claude --version`).
 
-### Installation en une commande (la plus simple)
-
-Copiez cette ligne dans le terminal (pas dans Claude Code) :
+Dans le terminal (pas dans Claude Code) :
 ```bash
-mkdir -p ~/.claude/output-styles && curl -fsSL https://raw.githubusercontent.com/<utilisateur-ou-org>/<nom-du-depot>/main/output-styles/couleurs.md -o ~/.claude/output-styles/couleurs.md
+curl -fsSL https://raw.githubusercontent.com/DwainAB/plugin-colors-terminal/main/install.sh | bash
 ```
-Relancez ensuite Claude Code et tapez `/output-style Couleurs`. Pour mettre à jour le style, relancez la même commande.
 
-### Méthode 1 : copie du fichier
+Cette commande :
+1. installe le style dans `~/.claude/output-styles/couleurs.md` ;
+2. l'active pour toutes vos sessions Claude Code, dans `~/.claude/settings.json`, sans toucher à vos autres réglages.
 
-1. Récupérez le projet.
-   - Depuis le dépôt Git :
-     ```bash
-     git clone <URL_DU_DEPOT> couleurs-terminal
-     ```
-   - Ou depuis le zip reçu :
-     ```bash
-     unzip couleurs-terminal.zip
-     ```
-2. Copiez le style dans votre dossier Claude Code :
-   ```bash
-   mkdir -p ~/.claude/output-styles
-   cp couleurs-terminal/output-styles/couleurs.md ~/.claude/output-styles/
-   ```
-3. Relancez Claude Code (`claude`).
-
-> Pour activer le style uniquement dans un projet, copiez le fichier dans `.claude/output-styles/` à la racine de ce projet plutôt que dans `~/.claude/`. Une fois le fichier commité, tous ceux qui travaillent sur le projet l'ont automatiquement.
-
-### Méthode 2 : via le marketplace de plugins
-
-Dans Claude Code :
-```
-/plugin marketplace add <utilisateur-ou-org>/<nom-du-depot>
-/plugin install couleurs-terminal@couleurs-terminal
-```
-Relancez ensuite Claude Code. Si **Couleurs** n'apparaît pas dans `/output-style`, utilisez la méthode 1.
+Relancez ensuite Claude Code (`claude`), puis tapez `/output-style`. La liste doit afficher **Couleurs (current)**.
 
 ---
 
 ## Utilisation
 
-1. Dans Claude Code, activez le style :
-   ```
-   /output-style Couleurs
-   ```
-2. Vérifiez avec `/output-style` : la liste doit afficher `Couleurs (current)`.
-3. Le choix est conservé d'une session à l'autre. Si le style ne s'applique pas tout de suite, tapez `/clear`.
+Le style est actif automatiquement, il n'y a rien à faire.
 
-Pour revenir à l'affichage normal :
-```
-/output-style default
-```
+| Action | Commande dans Claude Code |
+|---|---|
+| Voir le style actif | `/output-style` |
+| Revenir à l'affichage normal (projet en cours) | `/output-style default` |
+| Réactiver le style | `/output-style Couleurs` |
+
+Si le style ne s'applique pas tout de suite, tapez `/clear`.
 
 ### Tester
 
@@ -80,32 +54,43 @@ Pour revenir à l'affichage normal :
 
 ---
 
-## Personnaliser
+## Mettre à jour
 
-Tout se règle dans `output-styles/couleurs.md`. Pour ajouter une catégorie, par exemple 🟣 **Commande à lancer**, ajoutez une ligne à la liste des repères. Relancez ensuite Claude Code.
+Relancez la commande d'installation :
+```bash
+curl -fsSL https://raw.githubusercontent.com/DwainAB/plugin-colors-terminal/main/install.sh | bash
+```
 
 ## Désinstaller
 
 ```bash
 rm ~/.claude/output-styles/couleurs.md
 ```
-Si vous l'avez installé comme plugin : `/plugin uninstall couleurs-terminal`.
+Retirez ensuite la ligne `"outputStyle": "Couleurs"` de `~/.claude/settings.json`.
 
 ---
 
-## Publier une nouvelle version (mainteneurs)
+## Pour un seul projet (toute l'équipe, sans installation)
 
-1. Modifiez `output-styles/couleurs.md`.
-2. Augmentez `version` dans `.claude-plugin/plugin.json`.
-3. Commitez et poussez sur le dépôt. Les utilisateurs de la méthode 1 recopient le fichier. Ceux de la méthode 2 lancent `/plugin marketplace update couleurs-terminal`.
+À la racine du dépôt du projet :
+1. Copiez `output-styles/couleurs.md` dans `.claude/output-styles/couleurs.md`.
+2. Ajoutez `"outputStyle": "Couleurs"` dans `.claude/settings.json`.
+3. Commitez les deux fichiers. Tous ceux qui ouvrent le projet avec Claude Code auront le style.
 
-### Structure du projet
+---
+
+## Personnaliser
+
+Tout se règle dans `output-styles/couleurs.md`. Pour ajouter une catégorie, par exemple 🟣 **Commande à lancer**, ajoutez une ligne à la liste des repères.
+
+## Structure du projet
 ```
-couleurs-terminal/
+plugin-colors-terminal/
 ├── .claude-plugin/
 │   ├── plugin.json        # métadonnées du plugin
-│   └── marketplace.json   # permet l'installation via /plugin
+│   └── marketplace.json   # installation via /plugin
 ├── output-styles/
 │   └── couleurs.md        # le style lui-même
+├── install.sh             # installation + activation en une commande
 └── README.md
 ```
